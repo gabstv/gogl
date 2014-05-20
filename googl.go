@@ -36,7 +36,7 @@ func Shorten(longUrl string) (*GooglResponse, error) {
 	buf := bytes.NewBuffer(jsonBytes)
 	res, err := http.Post(GooglShortenUrl, "application/json", buf)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return DecodeResponse(res)
@@ -47,7 +47,7 @@ func Expand(shortUrl string) (*GooglResponse, error) {
 
 	res, err := http.Get(expandUrl)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	return DecodeResponse(res)
