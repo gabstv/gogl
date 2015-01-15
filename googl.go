@@ -3,9 +3,11 @@ package gogl
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 const (
@@ -37,6 +39,9 @@ func Shorten(longUrl string) (*GooglResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+	if res.StatusCode != 200 {
+		return nil, errors.New("Http status code " + strconv.Itoa(res.StatusCode) + ": " + res.Status)
+	}
 
 	return DecodeResponse(res)
 }
@@ -47,6 +52,9 @@ func Expand(shortUrl string) (*GooglResponse, error) {
 	res, err := http.Get(expandUrl)
 	if err != nil {
 		return nil, err
+	}
+	if res.StatusCode != 200 {
+		return nil, errors.New("Http status code " + strconv.Itoa(res.StatusCode) + ": " + res.Status)
 	}
 
 	return DecodeResponse(res)
